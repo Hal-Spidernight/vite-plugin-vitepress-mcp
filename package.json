@@ -1,6 +1,10 @@
 {
   "devDependencies": {
-    "vitepress": "^1.6.3"
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
+    "nanoid": "^5.1.5",
+    "vitepress": "^1.6.3",
+    "zod": "^3.24.3"
   },
   "scripts": {
     "docs:dev": "vitepress dev",
@@ -8,6 +12,8 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.1",
+    "express": "^5.1.0",
     "minisearch": "^7.1.2"
   }
 }

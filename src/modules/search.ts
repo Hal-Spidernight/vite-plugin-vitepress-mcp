@@ -1,8 +1,13 @@
 import MiniSearch from "minisearch";
+import searchIndex from "../../.vitepress/search-index.json";
 
 const index = new MiniSearch({
   fields: ["title", "description"], // fields to index for full-text search
 });
+
+index.addAll(searchIndex); // add documents to the index
+
+// console.log("index", index);
 
 export function search(query: string) {
   const results = index.search(query, {
@@ -12,3 +17,5 @@ export function search(query: string) {
   });
   return results;
 }
+
+
