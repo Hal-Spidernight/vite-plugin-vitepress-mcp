@@ -1,0 +1,39 @@
+import { defineConfig } from "vitepress";
+import { MCPPlugin } from "../../src/mcp-plugin";
+
+// import render from "./render.mts";
+// https://vitepress.dev/reference/site-config
+export default defineConfig({
+  title: "VitePress MCP Server",
+  description: "VitepressをMCPに組み込むためのドキュメント",
+  themeConfig: {
+    search: {
+      provider: "local",
+      // options: {
+      //   async _render(src, env, md) {
+      //     return render(src, env, md);
+      //   },
+      // },
+    },
+    // https://vitepress.dev/reference/default-theme-config
+    nav: [
+      { text: "Home", link: "/" },
+      { text: "Examples", link: "/markdown-examples" },
+    ],
+
+    sidebar: [
+      {
+        text: "Examples",
+        items: [
+          { text: "Markdown Examples", link: "/markdown-examples" },
+          { text: "Runtime API Examples", link: "/api-examples" },
+        ],
+      },
+    ],
+
+    socialLinks: [{ icon: "github", link: "https://github.com/vuejs/vitepress" }],
+  },
+  vite: {
+    plugins: [MCPPlugin()],
+  },
+});

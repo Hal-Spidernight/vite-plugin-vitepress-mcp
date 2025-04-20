@@ -1,19 +1,19 @@
 {
   "devDependencies": {
     "@types/express": "^5.0.1",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.14.1",
     "nanoid": "^5.1.5",
     "vitepress": "^1.6.3",
     "zod": "^3.24.3"
   },
   "scripts": {
-    "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "mcp:dev": "npx vite-node ./src/server.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
     "express": "^5.1.0",
-    "minisearch": "^7.1.2"
+    "minisearch": "^7.1.2",
+    "vite": "^5.4.18"
   }
 }

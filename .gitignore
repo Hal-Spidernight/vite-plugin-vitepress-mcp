@@ -1,4 +1,5 @@
 .DS_Store
-node_modules
-.vitepress/dist
-.vitepress/cache 
+**/node_modules
+**/.vitepress/dist
+**/.vitepress/cache 
+**/.vitepress/search-index.json
