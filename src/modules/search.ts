@@ -1,15 +1,15 @@
 import MiniSearch from "minisearch";
-import searchIndex from "../../.vitepress/search-index.json";
+// import searchIndex from "../dist/search-index.json";
 
-const index = new MiniSearch({
-  fields: ["title", "description"], // fields to index for full-text search
-});
+export async function search(query: string) {
+  const index = new MiniSearch({
+    fields: ["title", "description"], // fields to index for full-text search
+  });
+  // console.log("index", index);
+  const searchIndex = (await (await fetch(`${process.cwd()}/.vitepress/search-index.json`)).json()) || [];
 
-index.addAll(searchIndex); // add documents to the index
+  index.addAll(searchIndex); // add documents to the index
 
-// console.log("index", index);
-
-export function search(query: string) {
   const results = index.search(query, {
     fuzzy: 0.2, // fuzzy search with a distance of 2
     prefix: true, // enable prefix search
@@ -17,5 +17,3 @@ export function search(query: string) {
   });
   return results;
 }
-
-

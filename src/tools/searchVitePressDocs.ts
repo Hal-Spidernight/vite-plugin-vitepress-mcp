@@ -9,8 +9,8 @@ export function toolSearchVitePressDocs(mcp: McpServer) {
     { keywords: z.array(z.string()) },
     async ({ keywords }) => {
       console.log("START: search-docs", keywords);
-      const results = keywords.map((keyword) => {
-        const searchResults = search(keyword);
+      const results = keywords.map(async (keyword) => {
+        const searchResults = await search(keyword);
         return searchResults.map((item) => ({
           title: item.title,
           relativePath: item.relativePath,

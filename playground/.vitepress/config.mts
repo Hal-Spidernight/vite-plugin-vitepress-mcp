@@ -9,11 +9,13 @@ export default defineConfig({
   themeConfig: {
     search: {
       provider: "local",
-      // options: {
-      //   async _render(src, env, md) {
-      //     return render(src, env, md);
-      //   },
-      // },
+      options: {
+        async _render(src, env, md) {
+          // console.log("render", env);
+          const html = await md.render(src, env);
+          return html;
+        },
+      },
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -34,6 +36,6 @@ export default defineConfig({
     socialLinks: [{ icon: "github", link: "https://github.com/vuejs/vitepress" }],
   },
   vite: {
-    plugins: [MCPPlugin()],
+    plugins: [MCPPlugin({ port: 4000 })],
   },
 });

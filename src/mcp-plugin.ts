@@ -1,38 +1,51 @@
 import { Plugin, UserConfig } from "vite";
 import { UserConfig as VPUserConfig } from "vitepress";
 import render from "./modules/render";
+// import { runServer, stopServer } from "./modules/server";
 
-export function MCPPlugin(inlineOptions?: any): Plugin {
+export type MCPPluginOptions = {
+  port: number;
+};
+
+export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
     name: "vite-plugin-mcp",
     enforce: "pre",
-    config(userConfig: UserConfig): UserConfig {
-      // SiteConfig 型にキャストして安全に操作
+    config: (userConfig: UserConfig, env): VPUserConfig => {
       const vpConfig = userConfig as VPUserConfig;
+        console.log("vpConfig", userConfig.plugins);
 
-      //   // 例：markdown オプションを置き換え
-      //   vpConfig.markdown = {
-      //     ...(vpConfig.markdown || {}),
-      //     lineNumbers: true,
-      //   };
+      const vtPlg = (userConfig.plugins ?? []).find((plg: any) => plg.name === "vitepress");
+      if (vtPlg && vtPlg.configResolved) {
+        const originalConfig = vtPlg.configResolved;
+        console.log("found vitepress");
+        vtPlg.configResolved = function (vpUserConfig: VPUserConfig) {
+          console.log("vpUserConfig", vpUserConfig);
+          const vpUserThemeConfig = (vpUserConfig as any).vitepress.userConfig.themeConfig;
 
-      return vpConfig;
-    },
-    configResolved: (resolvedConfig) => {
-      const vpConfig = resolvedConfig as VPUserConfig;
-      if (!vpConfig.themeConfig) vpConfig.themeConfig = {};
-      if (!vpConfig.themeConfig.search) vpConfig.themeConfig.search = {};
-      if (!vpConfig.themeConfig.search.options) vpConfig.themeConfig.search.options = {};
-      if (!vpConfig.themeConfig.search.options._render) {
-        vpConfig.themeConfig.search.options._render = async (src, env, md) => {
-          return await render(src, env, md);
-        };
-      } else {
-        vpConfig.themeConfig.search.options._render = async (src, env, md) => {
-          await render(src, env, md);
-          return await vpConfig.themeConfig.search.options._render(src, env, md);
+          console.log("vpUserThemeConfig", vpUserThemeConfig);
+
+          if (!vpUserThemeConfig.themeConfig) vpUserThemeConfig.themeConfig = {};
+
+          if (!vpUserThemeConfig.themeConfig.search) vpUserThemeConfig.themeConfig.search = {};
+
+          if (!vpUserThemeConfig.themeConfig.search.options) vpUserThemeConfig.themeConfig.search.options = {};
+
+          // _renderを上書き
+          vpUserThemeConfig.themeConfig.search.options._render = async (src, env, md) => {
+            return await render(src, env, md);
+          };
+          return originalConfig.call(this, vpUserConfig);
         };
       }
+      return vpConfig;
     },
+    // buildEnd: () => {
+    //   // MCPサーバ起動
+    //   runServer(inlineOptions?.port);
+    // },
+    // handleHotUpdate: async (ctx) => {
+    //   await stopServer();
+    // },
   } satisfies Plugin;
 }
