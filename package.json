@@ -13,6 +13,7 @@
   "keywords": [
     "vitepress",
     "vite",
+    "vite-plugin",
     "MCP"
   ],
   "author": "Hal Spidernight",
