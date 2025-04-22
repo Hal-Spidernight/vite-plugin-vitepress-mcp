@@ -1,60 +1,47 @@
 import { Plugin, UserConfig } from "vite";
 import { UserConfig as VPUserConfig } from "vitepress";
-// import render from "./modules/render";
+import render from "./modules/render";
 
 export type MCPPluginOptions = {
   port: number;
 };
 
-
-
 export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
     name: "vite-plugin-vitepress-mcp",
-    enforce: "pre",
-    configureServer: (server) => {
-      console.log("start configureServer");
+    enforce: "post",
+    config: (config: UserConfig): VPUserConfig => {
+      // console.log("config");
+      const vpConfig = config as VPUserConfig;
+
+      // console.log("vpUserConfig", vpConfig);
+      let vpUserThemeConfig = (config as any).vitepress.userConfig.themeConfig;
+
+      // console.log("vpUserThemeConfig", vpUserThemeConfig);
+
+      if (!vpUserThemeConfig) vpUserThemeConfig = {};
+
+      if (!vpUserThemeConfig.search) vpUserThemeConfig.search = {};
+
+      if (!vpUserThemeConfig.search.options) vpUserThemeConfig.search.options = {};
+
+      // _renderを上書き
+      let originalRender = async (src, env, md) => {
+        // console.log("no original");
+        const html = await md.render(src, env);
+        return html;
+      };
+      if (vpUserThemeConfig.search.options._render) {
+        originalRender = vpUserThemeConfig.search.options._render;
+      }
+      vpUserThemeConfig.search.options._render = async (src, env, md) => {
+        await render(src, env, md);
+        return await originalRender(src, env, md);
+      };
+
+      // vpUserThemeConfig.search.options.hoge = "10"
+      // console.log(vpConfig.vitepress.userConfig.themeConfig.search.options)
+      return vpConfig;
     },
-    buildStart: (options) => {
-      console.log("start buildStart");
-    },
-    config: (userConfig: UserConfig, env): VPUserConfig => {
-      console.log("userConfig");
-      return userConfig;
-      // const vpConfig = userConfig as VPUserConfig;
-      //   console.log("vpConfig", userConfig.plugins);
-
-      // const vtPlg = (userConfig.plugins ?? []).find((plg: any) => plg.name === "vitepress");
-      // if (vtPlg && vtPlg.configResolved) {
-      //   const originalConfig = vtPlg.configResolved;
-      //   console.log("found vitepress");
-      //   vtPlg.configResolved = function (vpUserConfig: VPUserConfig) {
-      //     console.log("vpUserConfig", vpUserConfig);
-      //     const vpUserThemeConfig = (vpUserConfig as any).vitepress.userConfig.themeConfig;
-
-      //     console.log("vpUserThemeConfig", vpUserThemeConfig);
-
-      //     if (!vpUserThemeConfig.themeConfig) vpUserThemeConfig.themeConfig = {};
-
-      //     if (!vpUserThemeConfig.themeConfig.search) vpUserThemeConfig.themeConfig.search = {};
-
-      //     if (!vpUserThemeConfig.themeConfig.search.options) vpUserThemeConfig.themeConfig.search.options = {};
-
-      //     // _renderを上書き
-      //     vpUserThemeConfig.themeConfig.search.options._render = async (src, env, md) => {
-      //       return await render(src, env, md);
-      //     };
-      //     return originalConfig.call(this, vpUserConfig);
-      //   };
-      // }
-      // return vpConfig;
-    },
-    // buildEnd: () => {
-    //   // MCPサーバ起動
-    //   runServer(inlineOptions?.port);
-    // },
-    // handleHotUpdate: async (ctx) => {
-    //   await stopServer();
-    // },
   } satisfies Plugin;
 }

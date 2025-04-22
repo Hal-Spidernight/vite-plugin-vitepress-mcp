@@ -11,7 +11,7 @@ export default defineConfig({
       provider: "local",
       options: {
         async _render(src, env, md) {
-          // console.log("render", env);
+          console.log("_render");
           const html = await md.render(src, env);
           return html;
         },
