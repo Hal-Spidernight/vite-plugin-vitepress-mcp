@@ -1,36 +1,37 @@
 import { Plugin, UserConfig } from "vite";
 import { UserConfig as VPUserConfig } from "vitepress";
+import { styleText } from "node:util";
 import render from "./modules/render";
+import { runServer, restartServer } from "./modules/server";
 
 export type MCPPluginOptions = {
   port: number;
 };
+
+let serverBootFlg = false;
 
 export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
     name: "vite-plugin-vitepress-mcp",
     enforce: "post",
     config: (config: UserConfig): VPUserConfig => {
-      // console.log("config");
       const vpConfig = config as VPUserConfig;
 
-      // console.log("vpUserConfig", vpConfig);
       let vpUserThemeConfig = (config as any).vitepress.userConfig.themeConfig;
 
-      // console.log("vpUserThemeConfig", vpUserThemeConfig);
-
       if (!vpUserThemeConfig) vpUserThemeConfig = {};
-
       if (!vpUserThemeConfig.search) vpUserThemeConfig.search = {};
+      if (!vpUserThemeConfig.search.options) {
+        console.error(styleText("bgRed", "Vitepress search.options are not defined. Please set 'themeConfig.search.options' on VitePress config."));
+        serverBootFlg = false;
+        return config;
+      }
 
-      if (!vpUserThemeConfig.search.options) vpUserThemeConfig.search.options = {};
-
-      // _renderを上書き
       let originalRender = async (src, env, md) => {
-        // console.log("no original");
         const html = await md.render(src, env);
         return html;
       };
+
       if (vpUserThemeConfig.search.options._render) {
         originalRender = vpUserThemeConfig.search.options._render;
       }
@@ -38,10 +39,24 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
         await render(src, env, md);
         return await originalRender(src, env, md);
       };
+      serverBootFlg = true;
 
-      // vpUserThemeConfig.search.options.hoge = "10"
-      // console.log(vpConfig.vitepress.userConfig.themeConfig.search.options)
       return vpConfig;
+    },
+    configResolved() { 
+      setTimeout(async () => {
+        if (!serverBootFlg) {
+          console.error("search-index.json is not found.");
+          return;
+        }
+
+        runServer(inlineOptions?.port);
+      }, 1500);
+    },
+    async watchChange() {
+      if (serverBootFlg) {
+        await restartServer();
+      }
     },
   } satisfies Plugin;
 }

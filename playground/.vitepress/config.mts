@@ -9,13 +9,7 @@ export default defineConfig({
   themeConfig: {
     search: {
       provider: "local",
-      options: {
-        async _render(src, env, md) {
-          console.log("_render");
-          const html = await md.render(src, env);
-          return html;
-        },
-      },
+      options: {},
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
