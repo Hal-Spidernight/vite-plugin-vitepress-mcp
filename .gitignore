@@ -3,3 +3,4 @@
 **/.vitepress/dist
 **/.vitepress/cache 
 **/.vitepress/search-index.json
+dist

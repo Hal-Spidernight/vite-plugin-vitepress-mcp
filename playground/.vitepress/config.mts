@@ -1,5 +1,5 @@
 import { defineConfig } from "vitepress";
-import { MCPPlugin } from "../../src";
+import { MCPPlugin } from "../../dist";
 
 // import render from "./render.mts";
 // https://vitepress.dev/reference/site-config
@@ -9,13 +9,7 @@ export default defineConfig({
   themeConfig: {
     search: {
       provider: "local",
-      options: {
-        async _render(src, env, md) {
-          // console.log("render", env);
-          const html = await md.render(src, env);
-          return html;
-        },
-      },
+      options: {},
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [

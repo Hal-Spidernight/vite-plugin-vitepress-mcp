@@ -1,0 +1,5 @@
+/src
+/node_modules
+playground/.vitepress/cache
+playground/.vitepress/search-index.json
+tsconfig.json
