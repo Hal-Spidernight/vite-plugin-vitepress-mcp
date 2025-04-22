@@ -20,6 +20,11 @@
   "bugs": {
     "url": "https://github.com/Hal-Spidernight/vite-plugin-vitepress-mcp/issues"
   },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "mcp:dev": "npx vite-node ./src/server.ts"
+  },
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/markdown-it": "^14.1.2",
@@ -27,11 +32,6 @@
     "nanoid": "^5.1.5",
     "vitepress": "^1.6.3",
     "zod": "^3.24.3"
-  },
-  "scripts": {
-    "build": "tsc",
-    "prepare": "npm run build",
-    "mcp:dev": "npx vite-node ./src/server.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
