@@ -27,7 +27,7 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
         return config;
       }
 
-      let originalRender = async (src, env, md) => {
+      let originalRender = async (src: any, env: any, md: any) => {
         const html = await md.render(src, env);
         return html;
       };
@@ -35,7 +35,7 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
       if (vpUserThemeConfig.search.options._render) {
         originalRender = vpUserThemeConfig.search.options._render;
       }
-      vpUserThemeConfig.search.options._render = async (src, env, md) => {
+      vpUserThemeConfig.search.options._render = async (src: any, env: any, md: any) => {
         await render(src, env, md);
         return await originalRender(src, env, md);
       };
@@ -43,7 +43,7 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
 
       return vpConfig;
     },
-    configResolved() { 
+    configResolved() {
       setTimeout(async () => {
         if (!serverBootFlg) {
           console.error("search-index.json is not found.");
