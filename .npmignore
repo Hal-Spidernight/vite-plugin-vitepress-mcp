@@ -1,3 +1,4 @@
+.vscode/
 /src
 /node_modules
 playground/.vitepress/cache
