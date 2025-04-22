@@ -1,4 +1,25 @@
 {
+  "name": "vitepress-plugin-mcp",
+  "version": "0.0.1",
+  "description": "Add Model Context Protocol support to VitePress",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hal-Spidernight/vitepress-plugin-mcp.git"
+  },
+  "main": "./dist/vitepress-plugin-mcp.js",
+  "module": "./dist/vitepress-plugin-mcp.mjs",
+  "keywords": [
+    "vitepress",
+    "vite",
+    "MCP"
+  ],
+  "author": "Hal Spidernight",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hal-Spidernight/vitepress-plugin-mcp/issues"
+  },
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/markdown-it": "^14.1.2",
