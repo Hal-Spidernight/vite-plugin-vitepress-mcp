@@ -26,7 +26,7 @@
   "readme": "./README.md",
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
+    "prepare": "pnpm run build",
     "mcp:dev": "npx vite-node ./src/server.ts"
   },
   "devDependencies": {
