@@ -5,8 +5,8 @@
     "lib": ["ESNext"],
     "declaration": true,
     "sourceMap": true,
-    "outDir": "./dist",
-    "declarationDir": "./dist/types",
+    "outDir": "playground/node_modules/vite-plugin-vitepress-mcp/dist",
+    "declarationDir": "playground/node_modules/vite-plugin-vitepress-mcp/dist/types",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
@@ -16,5 +16,5 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*", "*.d.ts"],
-  "exclude": ["node_modules", "playground", "dist"]
+  "exclude": ["node_modules", "playground", "playground/node_modules/vite-plugin-vitepress-mcp/dist"]
 }
