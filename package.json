@@ -7,14 +7,14 @@
     "type": "git",
     "url": "git+https://github.com/Hal-Spidernight/vite-plugin-vitepress-mcp.git"
   },
-  "main": "./dist/vitepress-plugin-mermaid.umd.js",
+  "main": "./dist/vitepress-plugin-mcp.umd.js",
   "module": "./dist/vitepress-plugin-mcp.es.mjs",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/vitepress-plugin-mcp.es.mjs",
-      "require": "./dist/vitepress-plugin-mermaid.umd.js"
+      "require": "./dist/vitepress-plugin-mcp.umd.js"
     }
   },
   "files": [
@@ -33,7 +33,7 @@
   },
   "readme": "./README.md",
   "scripts": {
-    "build": "vite build && tsc",
+    "build": "vite build",
     "prepare": "pnpm run build",
     "mcp:dev": "npx vite-node ./src/server.ts"
   },
@@ -52,6 +52,7 @@
     "nanoid": "^5.1.5",
     "typescript": "^5.8.3",
     "vite": "^5.4.18",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "zod": "^3.24.3"
   }
 }
