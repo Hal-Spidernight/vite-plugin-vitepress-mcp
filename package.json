@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vitepress-mcp",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Search MCP Server for VitePress",
   "type": "module",
   "repository": {
@@ -10,11 +10,11 @@
   "main": "./dist/vitepress-plugin-mermaid.umd.js",
   "module": "./dist/vitepress-plugin-mcp.es.mjs",
   "types": "./dist/types/index.d.ts",
-  "exports":{
-    ".":{
-      "types":"./dist/index.d.ts",
-      "import":"./dist/vitepress-plugin-mcp.es.mjs",
-      "require":"./dist/vitepress-plugin-mermaid.umd.js"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/vitepress-plugin-mcp.es.mjs",
+      "require": "./dist/vitepress-plugin-mermaid.umd.js"
     }
   },
   "files": [
