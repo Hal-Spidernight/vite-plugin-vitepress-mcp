@@ -6,7 +6,7 @@ export async function search(query: string) {
     fields: ["title", "description"], // fields to index for full-text search
   });
   // console.log("index", index);
-  const searchIndex = (await (await fetch(`${process.cwd()}/.vitepress/search-index.json`)).json()) || [];
+  const searchIndex = ((await (await fetch(`${process.cwd()}/.vitepress/search-index.json`)).json()) as any[]) || [];
 
   index.addAll(searchIndex); // add documents to the index
 
