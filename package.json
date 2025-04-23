@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vitepress-mcp",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Search MCP Server for VitePress",
   "type": "module",
   "repository": {
@@ -25,7 +25,7 @@
   },
   "readme": "./README.md",
   "scripts": {
-    "build": "tsc",
+    "build": "vite build & tsc",
     "prepare": "pnpm run build",
     "mcp:dev": "npx vite-node ./src/server.ts"
   },
@@ -33,6 +33,7 @@
     "@types/express": "^5.0.1",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.14.1",
+    "vite-plugin-dts": "^4.5.3",
     "vitepress": "^1.6.3"
   },
   "dependencies": {
