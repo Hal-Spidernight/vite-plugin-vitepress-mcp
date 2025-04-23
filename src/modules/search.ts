@@ -1,11 +1,9 @@
 import MiniSearch from "minisearch";
-// import searchIndex from "../dist/search-index.json";
 
 export async function search(query: string) {
   const index = new MiniSearch({
     fields: ["title", "description"], // fields to index for full-text search
   });
-  // console.log("index", index);
   const searchIndex = ((await (await fetch(`${process.cwd()}/.vitepress/search-index.json`)).json()) as any[]) || [];
 
   index.addAll(searchIndex); // add documents to the index

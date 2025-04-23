@@ -7,10 +7,18 @@
     "type": "git",
     "url": "git+https://github.com/Hal-Spidernight/vite-plugin-vitepress-mcp.git"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/vitepress-plugin-mermaid.umd.js",
+  "module": "./dist/vitepress-plugin-mcp.es.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports":{
+    ".":{
+      "types":"./dist/index.d.ts",
+      "import":"./dist/vitepress-plugin-mcp.es.mjs",
+      "require":"./dist/vitepress-plugin-mermaid.umd.js"
+    }
+  },
   "files": [
-    "./dist"
+    "dist"
   ],
   "keywords": [
     "vitepress",

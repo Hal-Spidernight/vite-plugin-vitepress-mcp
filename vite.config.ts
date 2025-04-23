@@ -13,7 +13,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "VitePressMCPPlugin",
-      fileName: (format: string) => (format == "es" ? `vitepress-plguin-mcp.${format}.mjs` : `vitepress-plugin-mermaid.${format}.js`),
+      fileName: (format: string) => (format == "es" ? `vitepress-plguin-mcp.${format}.mjs` : `vitepress-plugin-mcp.${format}.js`),
     },
     rollupOptions: {
       external: ["markdown-it", "nanoid", "node:crypto", "crypto", "node:fs", "node:path", "node:util"],
