@@ -1,5 +1,9 @@
 ## Vite Plugin VitePress MCP
 
+npm
+
+https://www.npmjs.com/package/vite-plugin-vitepress-mcp
+
 ## Description
 
 This Vite plugin is an extension plugin for using VitePress as an MCP server.
@@ -15,7 +19,7 @@ pnpm add -D vite-plugin-vitepress-mcp
 
 ```ts
 import { defineConfig } from "vitepress";
-import { MCPPlugin } from "../../dist";
+import { MCPPlugin } from "vite-plugin-vitepress-mcp";
 
 export default defineConfig({
   title: "VitePress MCP Server",
