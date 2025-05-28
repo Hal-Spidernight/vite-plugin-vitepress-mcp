@@ -1,5 +1,6 @@
 import { defineConfig } from "vitepress";
-import { MCPPlugin } from "vite-plugin-vitepress-mcp";
+// import { MCPPlugin } from "vite-plugin-vitepress-mcp";
+import { MCPPlugin } from "../../src/index";
 
 // import render from "./render.mts";
 // https://vitepress.dev/reference/site-config
