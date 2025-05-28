@@ -8,8 +8,17 @@ let renderCount = 0;
 export default async function (src: string, env: MarkdownEnv, md: MarkdownIt) {
   const html = await md.render(src, env);
 
+  //.vitepressフォルダを検索
+  const cliArgs = process.argv.slice(2);
+  //NOTE: "npm run dev docs"のように実行した場合、cliArgs[0]は"dev"になる
+  let pathPrefix = process.cwd();
+  if (cliArgs.length >= 2) {
+    const targetPathPrefix = cliArgs[1];
+    pathPrefix = path.resolve(process.cwd(), targetPathPrefix);
+  }
+
   // 検索用インデックスを生成・保存
-  const indexPath = path.resolve(process.cwd(), ".vitepress", "search-index.json");
+  const indexPath = path.resolve(pathPrefix, ".vitepress", "search-index.json");
   let index: any[] = [];
   if (renderCount === 0) {
     fs.writeFileSync(indexPath, JSON.stringify([], null, 2), "utf-8");
