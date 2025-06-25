@@ -46,49 +46,13 @@ export function runServer(port = 3000, buildMode = false) {
 
   // NOTE:Handle POST requests for client-to-server communication
   app.post("/mcp", async (req, res) => {
-    try {
-      // Check for existing session ID
-      const sessionId = req.headers["mcp-session-id"] as string | undefined;
-
-      let transport: StreamableHTTPServerTransport;
-
-      if (sessionId && transports.streamable[sessionId]) {
-        // Reuse existing transport
-        transport = transports.streamable[sessionId];
-      } else if (!sessionId && isInitializeRequest(req.body)) {
-        transport = await initializeStreamableTransport();
-
-        await initializeMCPServer(transport, res);
-      } else {
-        // Invalid request
-        res.status(400).json({
-          jsonrpc: "2.0",
-          error: {
-            code: -32000,
-            message: "Bad Request: No valid session ID provided",
-          },
-          id: null,
-        });
-        res.send();
-        return;
-      }
-
-      // Handle the request
-      await transport.handleRequest(req, res, req.body);
-    } catch (error) {
-      console.error("Error handling MCP request:", error);
-      if (!res.headersSent) {
-        res.status(500).json({
-          jsonrpc: "2.0",
-          error: {
-            code: -32603,
-            message: "Internal server error",
-          },
-          id: null,
-        });
-      }
-    }
+    await callStreamableServer(req, res);
   });
+
+  // // Handle GET requests for Streamable HTTP sessions
+  // app.get("/mcp", async (req, res) => {
+  //   await callStreamableServer(req, res);
+  // });
 
   // Handle GET requests for server-to-client notifications via SSE
   app.get("/mcp/__sse", handleSSESessionRequest);
@@ -126,19 +90,69 @@ export function runServer(port = 3000, buildMode = false) {
 }
 
 /**
+ * Handle incoming requests to the MCP server.
+ * @param req 
+ * @param res 
+ * @returns 
+ */
+const callStreamableServer = async (req: express.Request, res: express.Response) => {
+  try {
+    // Check for existing session ID
+    const sessionId = req.headers["mcp-session-id"] as string | undefined;
+
+    let transport: StreamableHTTPServerTransport;
+
+    if (sessionId && transports.streamable[sessionId]) {
+      // Reuse existing transport
+      transport = transports.streamable[sessionId];
+    } else if (!sessionId && isInitializeRequest(req.body)) {
+      transport = await initializeStreamableTransport();
+
+      await initializeMCPServer(transport, res);
+    } else {
+      // Invalid request
+      res.status(400).json({
+        jsonrpc: "2.0",
+        error: {
+          code: -32000,
+          message: "Bad Request: No valid session ID provided",
+        },
+        id: null,
+      });
+      res.send();
+      return;
+    }
+
+    // Handle the request
+    await transport.handleRequest(req, res, req.body);
+  } catch (error) {
+    console.error("Error handling MCP request:", error);
+    if (!res.headersSent) {
+      res.status(500).json({
+        jsonrpc: "2.0",
+        error: {
+          code: -32603,
+          message: "Internal server error",
+        },
+        id: null,
+      });
+    }
+  }
+};
+
+/**
  * Reusable handler for GET and DELETE requests for SSE sessions.
  * @param req
  * @param res
  * @returns
  */
 const handleSSESessionRequest = async (req: express.Request, res: express.Response) => {
-  console.log("Received request:", req.headers, req.method);
   const sessionId = req.headers["mcp-session-id"] as string | undefined;
 
-  console.log("Session ID:", sessionId);
+  // console.log("Session ID:", sessionId);
   let transport = transports.sse[sessionId ?? ""];
   if (!sessionId || !transports.sse[sessionId]) {
-    console.warn("Invalid or missing session ID. Creating new SSE transport.");
+    // console.warn("Invalid or missing session ID. Creating new SSE transport.");
     transport = await initializeSSETransport(res);
   }
   await initializeMCPServer(transport, res);
@@ -154,7 +168,7 @@ const initializeSSETransport = async (res: express.Response) => {
   // New initialization request
   const transport = new SSEServerTransport("/messages", res);
   res.setHeader("mcp-session-id", transport.sessionId);
-  console.log("Creating new SSE transport for session ID:", transport.sessionId);
+  // console.log("Creating new SSE transport for session ID:", transport.sessionId);
   transports.sse[transport.sessionId] = transport;
 
   res.on("close", () => {
