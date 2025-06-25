@@ -1,12 +1,13 @@
 import MiniSearch from "minisearch";
 import path from "node:path";
 import fs from "node:fs";
-export async function search(query: string) {
+export async function search(query: string, buildMode = false) {
   const index = new MiniSearch({
     fields: ["title", "content", "relativePath"], // fields to index for full-text search
     storeFields: ["id", "title", "content", "relativePath", "excerpt"],
   });
-  const indexPath = path.resolve(process.cwd(), ".vitepress/search-index.json");
+  const buildPath = buildMode ? "dist" : ""; // Use 'dist' for build mode, otherwise empty
+  const indexPath = path.resolve(process.cwd(), ".vitepress", buildPath, "/search-index.json");
   // console.log("indexPath:", indexPath);
   const searchIndex = JSON.parse(fs.readFileSync(indexPath, "utf-8")) || [];
   index.addAll(searchIndex); // add documents to the index

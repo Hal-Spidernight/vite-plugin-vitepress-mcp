@@ -20,7 +20,7 @@ let app = express();
 
 let appServer: Server;
 
-export function runServer(port = 3000) {
+export function runServer(port = 3000, buildMode = false) {
   console.log(
     styleText(
       "blue",
@@ -37,7 +37,7 @@ export function runServer(port = 3000) {
     version: "1.0.0",
   });
 
-  toolSearchVitePressDocs(mcpServer);
+  toolSearchVitePressDocs(mcpServer, buildMode);
   promptBasic(mcpServer);
 
   // NOTE:Handle POST requests for client-to-server communication

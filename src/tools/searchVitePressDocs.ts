@@ -2,7 +2,7 @@ import { z } from "zod";
 import { search } from "../modules/search";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-export function toolSearchVitePressDocs(mcp: McpServer) {
+export function toolSearchVitePressDocs(mcp: McpServer, buildMode = false) {
   mcp.tool(
     "search_vitepress_docs",
     "Search VitePress Documents For This Product. Extract up to five keywords each English and native language, and define all of them as single words. e.g. Vitepress, API, Specification,Extensions etc.",
@@ -12,7 +12,7 @@ export function toolSearchVitePressDocs(mcp: McpServer) {
       // console.log("START: search-docs", keywords);
       const results = [];
       for await (const keyword of keywords) {
-        const searchResults = await search(keyword);
+        const searchResults = await search(keyword, buildMode);
         console.log("searchResults:", searchResults);
         const result = searchResults.map((item) => {
           return { title: item.title, relativePath: item.relativePath, content: item.content, excerpt: item.excerpt };
