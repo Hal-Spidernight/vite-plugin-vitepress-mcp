@@ -36,8 +36,9 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
         originalRender = vpUserThemeConfig.search.options._render;
       }
       vpUserThemeConfig.search.options._render = async (src: any, env: any, md: any) => {
-        await render(src, env, md);
-        return await originalRender(src, env, md);
+        const buildMode = process.argv.includes("build") || process.argv.includes("vitepress build");
+        await render(src, env, md, buildMode);
+        return await originalRender(src, env, md,);
       };
       serverBootFlg = true;
 
@@ -54,6 +55,11 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
 
         runServer(inlineOptions?.port);
       }, 1500);
+    },
+    configurePreviewServer(server) {
+      console.log("preview server:",server);
+      serverBootFlg = true;
+      
     },
     async watchChange(id:string,change:any) {
       if (serverBootFlg) {

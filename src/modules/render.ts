@@ -5,7 +5,7 @@ import { MarkdownEnv } from "vitepress";
 import MarkdownIt from "markdown-it";
 let renderCount = 0;
 
-export default async function (src: string, env: MarkdownEnv, md: MarkdownIt) {
+export default async function (src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false) {
   const html = await md.render(src, env);
 
   //.vitepressフォルダを検索
@@ -17,10 +17,21 @@ export default async function (src: string, env: MarkdownEnv, md: MarkdownIt) {
     pathPrefix = path.resolve(process.cwd(), targetPathPrefix);
   }
 
+  //build時は.vitepress/distへ出力
+  let buildPath = "";
+  if (buildMode) {
+    // ビルドモードの場合、.vitepressフォルダはプロジェクトルートにあると仮定
+    buildPath = "dist";
+  }
+
   // 検索用インデックスを生成・保存
-  const indexPath = path.resolve(pathPrefix, ".vitepress", "search-index.json");
+  const indexPath = path.resolve(pathPrefix, ".vitepress", buildPath, "search-index.json");
   let index: any[] = [];
   if (renderCount === 0) {
+    const dir = path.dirname(indexPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
     fs.writeFileSync(indexPath, JSON.stringify([], null, 2), "utf-8");
   }
   if (fs.existsSync(indexPath)) {
