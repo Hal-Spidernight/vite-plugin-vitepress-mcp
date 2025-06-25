@@ -43,7 +43,9 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
 
       return vpConfig;
     },
-    configResolved() {
+    configResolved(config) {
+      if (config.command === "build") return; //NOTE: Skip server start on build command
+
       setTimeout(async () => {
         if (!serverBootFlg) {
           console.error("search-index.json is not found.");
@@ -53,7 +55,7 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
         runServer(inlineOptions?.port);
       }, 1500);
     },
-    async watchChange() {
+    async watchChange(id:string,change:any) {
       if (serverBootFlg) {
         await restartServer();
       }

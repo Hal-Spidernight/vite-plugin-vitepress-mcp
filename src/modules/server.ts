@@ -92,15 +92,20 @@ export function runServer(port = 3000) {
   // Handle DELETE requests for session termination
   app.delete("/mcp", handleSessionRequest);
 
-  appServer = app.listen(port);
-  console.log(
-    styleText(
-      "whiteBright",
-      `
-  VitePress Plugin MCP`
-    )
-  );
-  console.log(styleText("green", `  Server is running on http://localhost:${port}/mcp`));
+  let errorMessage = null;
+
+  appServer = app.listen(port, (error) => {
+    errorMessage = error?.message;
+    if ((errorMessage ?? "").includes("address already in use")) {
+      console.error("Error starting server:", error?.message);
+      console.warn("Port", port, "is already in use. Retrying with next port...");
+      port++;
+      runServer(port);
+      return;
+    }
+    console.log(styleText("whiteBright", `VitePress Plugin MCP`));
+    console.log(styleText("green", `  Server is running on http://localhost:${port}/mcp`));
+  });
 }
 
 /**
