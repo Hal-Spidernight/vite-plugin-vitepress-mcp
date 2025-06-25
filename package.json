@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vitepress-mcp",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Search MCP Server for VitePress",
   "type": "module",
   "repository": {
