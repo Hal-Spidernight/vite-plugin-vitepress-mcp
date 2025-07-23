@@ -14,9 +14,8 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
     name: "vite-plugin-vitepress-mcp",
     enforce: "post",
-    config: (config: UserConfig): VPUserConfig => {
-      const vpConfig = config as VPUserConfig;
-
+    config: (config: UserConfig, {command} ): VPUserConfig => {
+      console.log("MCPPlugin is running...");
       let vpUserThemeConfig = (config as any).vitepress.userConfig.themeConfig;
 
       if (!vpUserThemeConfig) vpUserThemeConfig = {};
@@ -36,16 +35,19 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
         originalRender = vpUserThemeConfig.search.options._render;
       }
       vpUserThemeConfig.search.options._render = async (src: any, env: any, md: any) => {
-        const buildMode = process.argv.includes("build") || process.argv.includes("vitepress build");
+        const buildMode = command === "build";
         await render(src, env, md, buildMode);
         return await originalRender(src, env, md,);
       };
       serverBootFlg = true;
 
-      return vpConfig;
+      return vpUserThemeConfig as VPUserConfig;
     },
     configResolved(config) {
-      if (config.command === "build") return; //NOTE: Skip server start on build command
+      if (config.command === "build"){
+        console.log("MCPPlugin: Build mode detected. Skipping server start.");
+        return; //NOTE: Skip server start on build command
+      } 
 
       setTimeout(async () => {
         if (!serverBootFlg) {

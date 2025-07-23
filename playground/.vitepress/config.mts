@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import { pagefindPlugin } from "vitepress-plugin-pagefind";
 // import { MCPPlugin } from "vite-plugin-vitepress-mcp";
 import { MCPPlugin } from "../../src/index";
 
@@ -7,6 +8,7 @@ import { MCPPlugin } from "../../src/index";
 export default defineConfig({
   title: "VitePress MCP Server",
   description: "VitepressをMCPに組み込むためのドキュメント",
+  lang: "ja-JP",
   themeConfig: {
     search: {
       provider: "local",
@@ -32,6 +34,6 @@ export default defineConfig({
     socialLinks: [{ icon: "github", link: "https://github.com/vuejs/vitepress" }],
   },
   vite: {
-    plugins: [MCPPlugin({ port: 4000 })],
+    plugins: [MCPPlugin({ port: 4000 }), pagefindPlugin()],
   },
 });
