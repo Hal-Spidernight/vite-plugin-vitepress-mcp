@@ -35,7 +35,11 @@
   "scripts": {
     "build": "vite build",
     "prepare": "pnpm run build",
-    "mcp:dev": "npx vite-node ./src/server.ts"
+    "mcp:dev": "npx vite-node ./src/server.ts",
+    "version:patch": "pnpm version patch",
+    "version:minor": "pnpm version minor",
+    "version:major": "pnpm version major",
+    "publish": "pnpm prepare && pnpm publish --access public"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
