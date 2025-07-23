@@ -2,6 +2,9 @@ import { defineConfig } from "vitepress";
 import { pagefindPlugin } from "vitepress-plugin-pagefind";
 // import { MCPPlugin } from "vite-plugin-vitepress-mcp";
 import { MCPPlugin } from "../../src/index";
+import path from "node:path";
+
+const specPath = path.resolve(__dirname, "../public/openapi.json");
 
 // import render from "./render.mts";
 // https://vitepress.dev/reference/site-config
@@ -34,6 +37,6 @@ export default defineConfig({
     socialLinks: [{ icon: "github", link: "https://github.com/vuejs/vitepress" }],
   },
   vite: {
-    plugins: [MCPPlugin({ port: 4000 }), pagefindPlugin()],
+    plugins: [MCPPlugin({ port: 4000, specPath }), pagefindPlugin()],
   },
 });

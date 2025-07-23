@@ -3,19 +3,21 @@ import path from "node:path";
 import { nanoid } from "nanoid";
 import { MarkdownEnv } from "vitepress";
 import MarkdownIt from "markdown-it";
+import { openAPIRender } from "./openApi";
 let renderCount = 0;
 
-export async function miniSearchRender(src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false) {
+/**
+ * Render function for VitePress.
+ * @param src
+ * @param env
+ * @param md
+ * @param buildMode
+ * @returns
+ */
+export async function mainRender(src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false, specPath?: string) {
   const html = await md.render(src, env);
 
-  //.vitepressフォルダを検索
-  const cliArgs = process.argv.slice(2);
-  //NOTE: "npm run dev docs"のように実行した場合、cliArgs[0]は"dev"になる
-  let pathPrefix = process.cwd();
-  if (cliArgs.length >= 2) {
-    const targetPathPrefix = cliArgs[1];
-    pathPrefix = path.resolve(process.cwd(), targetPathPrefix);
-  }
+  const pathPrefix = getPathPrefix();
 
   //build時は.vitepress/distへ出力
   let buildPath = "";
@@ -38,6 +40,16 @@ export async function miniSearchRender(src: string, env: MarkdownEnv, md: Markdo
     index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
     renderCount++;
   }
+
+  if (env.content?.includes("OASpec")) {
+    console.log("OpenAPI Spec detected. Using custom OpenAPI render.");
+    if (specPath) {
+      env.content = openAPIRender(src, env, md, specPath);
+    } else {
+      console.error("OpenAPI spec path is not defined. Skipping OpenAPI render.");
+    }
+  }
+
   const doc = {
     id: nanoid(),
     title: env?.title,
@@ -54,4 +66,21 @@ export async function miniSearchRender(src: string, env: MarkdownEnv, md: Markdo
 
   if (env.frontmatter?.title) return (await md.render(`# ${env.frontmatter.title}`)) + html;
   return html;
+}
+
+/**
+ * Get the path prefix for the VitePress project.
+ * @returns
+ * @private
+ */
+function getPathPrefix() {
+  //.vitepressフォルダを検索
+  const cliArgs = process.argv.slice(2);
+  //NOTE: "npm run dev docs"のように実行した場合、cliArgs[0]は"dev"になる
+  let pathPrefix = process.cwd();
+  if (cliArgs.length >= 2) {
+    const targetPathPrefix = cliArgs[1];
+    pathPrefix = path.resolve(process.cwd(), targetPathPrefix);
+  }
+  return pathPrefix;
 }

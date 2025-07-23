@@ -1,11 +1,12 @@
 import { Plugin, UserConfig } from "vite";
 import { UserConfig as VPUserConfig } from "vitepress";
 import { styleText } from "node:util";
-import {miniSearchRender} from "./modules/render/miniSearch";
+import { mainRender } from "./modules/render";
 import { runServer, restartServer } from "./modules/server";
 
 export type MCPPluginOptions = {
   port: number;
+  specPath?: string; // OpenAPI specification path
 };
 
 let serverBootFlg = false;
@@ -14,7 +15,7 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
     name: "vite-plugin-vitepress-mcp",
     enforce: "post",
-    config: (config: UserConfig, {command} ): VPUserConfig => {
+    config: (config: UserConfig): VPUserConfig => {
       console.log("MCPPlugin is running...");
       const vitepressConfig = (config as any).vitepress;
       let vpUserThemeConfig = vitepressConfig.userConfig.themeConfig;
@@ -30,12 +31,6 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
       return vpUserThemeConfig as VPUserConfig;
     },
     configResolved(config) {
-      const buildMode = config.command === "build";
-      if (buildMode){
-        console.log("MCPPlugin: Build mode detected. Skipping server start.");
-        return; //NOTE: Skip server start on build command
-      } 
-
       const vitepressConfig = (config as any).vitepress;
       let vpUserThemeConfig = vitepressConfig.userConfig.themeConfig;
 
@@ -47,10 +42,18 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
       if (vpUserThemeConfig.search.options._render) {
         originalRender = vpUserThemeConfig.search.options._render;
       }
+
+      const buildMode = config.command === "build";
       vpUserThemeConfig.search.options._render = async (src: any, env: any, md: any) => {
-        await miniSearchRender(src, env, md, buildMode);
+        await mainRender(src, env, md, buildMode, inlineOptions?.specPath);
         return await originalRender(src, env, md);
       };
+
+      if(buildMode){
+        console.log("MCPPlugin: Build mode detected. Skipping server start.");
+        return; //NOTE: Skip server start on build command
+      }
+
       serverBootFlg = true;
 
       setTimeout(async () => {
