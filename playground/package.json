@@ -8,9 +8,10 @@
     "@modelcontextprotocol/sdk": "^1.10.1",
     "express": "^5.1.0",
     "minisearch": "^7.1.2",
-    "vite-plugin-vitepress-mcp": "^0.1.13"
+    "vitepress-openapi": "^0.1.4"
   },
   "devDependencies": {
+    "vite-plugin-vitepress-mcp": "^0.1.13",
     "vitepress": "^1.6.3"
   }
 }
