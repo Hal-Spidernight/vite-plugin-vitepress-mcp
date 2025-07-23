@@ -92,9 +92,9 @@ export function runServer(port = 3000, buildMode = false) {
 
 /**
  * Handle incoming requests to the MCP server.
- * @param req 
- * @param res 
- * @returns 
+ * @param req
+ * @param res
+ * @returns
  */
 const callStreamableServer = async (req: express.Request, res: express.Response) => {
   try {
@@ -107,6 +107,7 @@ const callStreamableServer = async (req: express.Request, res: express.Response)
       // Reuse existing transport
       transport = transports.streamable[sessionId];
     } else if (!sessionId && isInitializeRequest(req.body)) {
+      console.log("Initializing new transport");
       transport = await initializeStreamableTransport();
 
       await initializeMCPServer(transport, res);

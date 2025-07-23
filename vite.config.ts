@@ -26,7 +26,24 @@ export default defineConfig({
       fileName: (format: string) => (format == "es" ? `vitepress-plugin-mcp.${format}.mjs` : `vitepress-plugin-mcp.${format}.js`),
     },
     rollupOptions: {
-      external: ["markdown-it", "nanoid", "node:crypto", "crypto", "node:fs", "fs", "node:path", "path", "node:util", "node:zlib", "node:http", "node:events", "node:net", "stream", "querystring"],
+      external: [
+        "markdown-it",
+        "nanoid",
+        "node:crypto",
+        "crypto",
+        "node:fs",
+        "fs",
+        "node:path",
+        "path",
+        "node:util",
+        "node:zlib",
+        "node:http",
+        "node:events",
+        "node:net",
+        "stream",
+        "querystring",
+        "url",
+      ],
       output: {
         globals: {
           "node:util": "node_util",
@@ -43,6 +60,7 @@ export default defineConfig({
           nanoid: "nanoid",
           crypto: "require$$0$3",
           "node:crypto": "node_crypto",
+          url: "url",
         },
       },
     },

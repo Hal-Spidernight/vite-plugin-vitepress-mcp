@@ -1,7 +1,8 @@
 import { defineConfig } from "vitepress";
 import { pagefindPlugin } from "vitepress-plugin-pagefind";
 // import { MCPPlugin } from "vitepress-plugin-mcp";
-import { MCPPlugin } from "../../src/index";
+// import { MCPPlugin } from "../../src/index";
+import { MCPPlugin } from "../../dist/vitepress-plugin-mcp.es.mjs";
 import path from "node:path";
 
 const specPath = path.resolve(__dirname, "../openapi/spec.json");
