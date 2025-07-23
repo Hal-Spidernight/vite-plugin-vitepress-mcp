@@ -3,19 +3,22 @@ import path from "node:path";
 import { nanoid } from "nanoid";
 import { MarkdownEnv } from "vitepress";
 import MarkdownIt from "markdown-it";
+import { openAPIRender } from "./openApi";
+import { getPathPrefix } from "../../utils/usePaths";
 let renderCount = 0;
 
-export default async function (src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false) {
+/**
+ * Render function for VitePress.
+ * @param src
+ * @param env
+ * @param md
+ * @param buildMode
+ * @returns
+ */
+export async function mainRender(src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false, specPath?: string) {
   const html = await md.render(src, env);
 
-  //.vitepressフォルダを検索
-  const cliArgs = process.argv.slice(2);
-  //NOTE: "npm run dev docs"のように実行した場合、cliArgs[0]は"dev"になる
-  let pathPrefix = process.cwd();
-  if (cliArgs.length >= 2) {
-    const targetPathPrefix = cliArgs[1];
-    pathPrefix = path.resolve(process.cwd(), targetPathPrefix);
-  }
+  const pathPrefix = getPathPrefix();
 
   //build時は.vitepress/distへ出力
   let buildPath = "";
@@ -38,6 +41,16 @@ export default async function (src: string, env: MarkdownEnv, md: MarkdownIt, bu
     index = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
     renderCount++;
   }
+
+  if (env.content?.includes("OASpec")) {
+    console.log("OpenAPI Spec detected. Using custom OpenAPI render.");
+    if (specPath) {
+      env.content = openAPIRender(src, env, md, specPath);
+    } else {
+      console.error("OpenAPI spec path is not defined. Skipping OpenAPI render.");
+    }
+  }
+
   const doc = {
     id: nanoid(),
     title: env?.title,
@@ -55,3 +68,5 @@ export default async function (src: string, env: MarkdownEnv, md: MarkdownIt, bu
   if (env.frontmatter?.title) return (await md.render(`# ${env.frontmatter.title}`)) + html;
   return html;
 }
+
+

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { search } from "../modules/search";
+import { searchByMiniSearch } from "../modules/search/miniSearch";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
 export function toolSearchVitePressDocs(mcp: McpServer, buildMode = false) {
@@ -12,7 +12,7 @@ export function toolSearchVitePressDocs(mcp: McpServer, buildMode = false) {
       // console.log("START: search-docs", keywords);
       const results = [];
       for await (const keyword of keywords) {
-        const searchResults = await search(keyword, buildMode);
+        const searchResults = await searchByMiniSearch(keyword, buildMode);
         console.log("searchResults:", searchResults);
         const result = searchResults.map((item) => {
           return { title: item.title, relativePath: item.relativePath, content: item.content, excerpt: item.excerpt };

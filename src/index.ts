@@ -1,23 +1,24 @@
 import { Plugin, UserConfig } from "vite";
 import { UserConfig as VPUserConfig } from "vitepress";
 import { styleText } from "node:util";
-import render from "./modules/render";
+import { mainRender } from "./modules/render";
 import { runServer, restartServer } from "./modules/server";
 
 export type MCPPluginOptions = {
   port: number;
+  specPath?: string; // OpenAPI specification path
 };
 
 let serverBootFlg = false;
 
 export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
-    name: "vite-plugin-vitepress-mcp",
+    name: "vitepress-plugin-mcp",
     enforce: "post",
     config: (config: UserConfig): VPUserConfig => {
-      const vpConfig = config as VPUserConfig;
-
-      let vpUserThemeConfig = (config as any).vitepress.userConfig.themeConfig;
+      console.log("MCPPlugin is running...");
+      const vitepressConfig = (config as any).vitepress;
+      let vpUserThemeConfig = vitepressConfig.userConfig.themeConfig;
 
       if (!vpUserThemeConfig) vpUserThemeConfig = {};
       if (!vpUserThemeConfig.search) vpUserThemeConfig.search = {};
@@ -27,6 +28,12 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
         return config;
       }
 
+      return vpUserThemeConfig as VPUserConfig;
+    },
+    configResolved(config) {
+      const vitepressConfig = (config as any).vitepress;
+      let vpUserThemeConfig = vitepressConfig.userConfig.themeConfig;
+
       let originalRender = async (src: any, env: any, md: any) => {
         const html = await md.render(src, env);
         return html;
@@ -35,17 +42,19 @@ export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
       if (vpUserThemeConfig.search.options._render) {
         originalRender = vpUserThemeConfig.search.options._render;
       }
-      vpUserThemeConfig.search.options._render = async (src: any, env: any, md: any) => {
-        const buildMode = process.argv.includes("build") || process.argv.includes("vitepress build");
-        await render(src, env, md, buildMode);
-        return await originalRender(src, env, md,);
-      };
-      serverBootFlg = true;
 
-      return vpConfig;
-    },
-    configResolved(config) {
-      if (config.command === "build") return; //NOTE: Skip server start on build command
+      const buildMode = config.command === "build";
+      vpUserThemeConfig.search.options._render = async (src: any, env: any, md: any) => {
+        await mainRender(src, env, md, buildMode, inlineOptions?.specPath);
+        return await originalRender(src, env, md);
+      };
+
+      if(buildMode){
+        console.log("MCPPlugin: Build mode detected. Skipping server start.");
+        return; //NOTE: Skip server start on build command
+      }
+
+      serverBootFlg = true;
 
       setTimeout(async () => {
         if (!serverBootFlg) {
