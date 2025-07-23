@@ -2,7 +2,7 @@
 
 npm
 
-https://www.npmjs.com/package/vite-plugin-vitepress-mcp
+https://www.npmjs.com/package/vitepress-plugin-mcp
 
 ## Description
 
@@ -12,14 +12,14 @@ By adding the plugin to the VitePress config, you can launch the MCP server.
 ## Install
 
 ```
-pnpm add -D vite-plugin-vitepress-mcp
+pnpm add -D vitepress-plugin-mcp
 ```
 
 ## Example
 
 ```ts
 import { defineConfig } from "vitepress";
-import { MCPPlugin } from "vite-plugin-vitepress-mcp";
+import { MCPPlugin } from "vitepress-plugin-mcp";
 
 export default defineConfig({
   title: "VitePress MCP Server",

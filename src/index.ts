@@ -13,7 +13,7 @@ let serverBootFlg = false;
 
 export function MCPPlugin(inlineOptions?: Partial<MCPPluginOptions>): Plugin {
   return {
-    name: "vite-plugin-vitepress-mcp",
+    name: "vitepress-plugin-mcp",
     enforce: "post",
     config: (config: UserConfig): VPUserConfig => {
       console.log("MCPPlugin is running...");

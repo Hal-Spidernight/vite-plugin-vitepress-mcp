@@ -1,11 +1,11 @@
 {
-  "name": "vite-plugin-vitepress-mcp",
+  "name": "vitepress-plugin-mcp",
   "version": "0.1.13",
   "description": "Search MCP Server for VitePress",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hal-Spidernight/vite-plugin-vitepress-mcp.git"
+    "url": "git+https://github.com/Hal-Spidernight/vitepress-plugin-mcp.git"
   },
   "main": "./dist/vitepress-plugin-mcp.umd.js",
   "module": "./dist/vitepress-plugin-mcp.es.mjs",
@@ -29,7 +29,7 @@
   "author": "Hal Spidernight",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Hal-Spidernight/vite-plugin-vitepress-mcp/issues"
+    "url": "https://github.com/Hal-Spidernight/vitepress-plugin-mcp/issues"
   },
   "readme": "./README.md",
   "scripts": {

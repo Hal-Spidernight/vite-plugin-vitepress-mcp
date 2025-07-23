@@ -1,6 +1,6 @@
 import { defineConfig } from "vitepress";
 import { pagefindPlugin } from "vitepress-plugin-pagefind";
-// import { MCPPlugin } from "vite-plugin-vitepress-mcp";
+// import { MCPPlugin } from "vitepress-plugin-mcp";
 import { MCPPlugin } from "../../src/index";
 import path from "node:path";
 
