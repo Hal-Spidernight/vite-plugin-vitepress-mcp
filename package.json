@@ -39,7 +39,7 @@
     "version:patch": "pnpm version patch",
     "version:minor": "pnpm version minor",
     "version:major": "pnpm version major",
-    "publish": "pnpm prepare && pnpm publish --access public"
+    "release": "pnpm prepare && pnpm publish --access public"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
