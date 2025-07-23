@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { MarkdownEnv } from "vitepress";
 import MarkdownIt from "markdown-it";
 import { openAPIRender } from "./openApi";
+import { getPathPrefix } from "../../utils/usePaths";
 let renderCount = 0;
 
 /**
@@ -68,19 +69,4 @@ export async function mainRender(src: string, env: MarkdownEnv, md: MarkdownIt, 
   return html;
 }
 
-/**
- * Get the path prefix for the VitePress project.
- * @returns
- * @private
- */
-function getPathPrefix() {
-  //.vitepressフォルダを検索
-  const cliArgs = process.argv.slice(2);
-  //NOTE: "npm run dev docs"のように実行した場合、cliArgs[0]は"dev"になる
-  let pathPrefix = process.cwd();
-  if (cliArgs.length >= 2) {
-    const targetPathPrefix = cliArgs[1];
-    pathPrefix = path.resolve(process.cwd(), targetPathPrefix);
-  }
-  return pathPrefix;
-}
+
