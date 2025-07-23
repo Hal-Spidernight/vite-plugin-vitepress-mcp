@@ -2,7 +2,7 @@ import DefaultTheme from "vitepress/theme";
 import { theme, useOpenapi } from "vitepress-openapi/client";
 import "vitepress-openapi/dist/style.css";
 
-import spec from "../../public/openapi.json";
+import spec from "../../openapi/spec.json";
 
 export default {
   extends: DefaultTheme,

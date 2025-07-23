@@ -46,6 +46,7 @@ export function runServer(port = 3000, buildMode = false) {
 
   // NOTE:Handle POST requests for client-to-server communication
   app.post("/mcp", async (req, res) => {
+    console.log("POST request received at /mcp");
     await callStreamableServer(req, res);
   });
 

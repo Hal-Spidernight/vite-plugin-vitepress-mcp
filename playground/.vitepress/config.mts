@@ -4,7 +4,7 @@ import { pagefindPlugin } from "vitepress-plugin-pagefind";
 import { MCPPlugin } from "../../src/index";
 import path from "node:path";
 
-const specPath = path.resolve(__dirname, "../public/openapi.json");
+const specPath = path.resolve(__dirname, "../openapi/spec.json");
 
 // import render from "./render.mts";
 // https://vitepress.dev/reference/site-config
