@@ -1,7 +1,14 @@
 import MiniSearch from "minisearch";
 import path from "node:path";
 import fs from "node:fs";
-export async function search(query: string, buildMode = false) {
+
+/**
+ * Search VitePress documentation using MiniSearch.
+ * @param query
+ * @param buildMode
+ * @returns
+ */
+export async function searchByMiniSearch(query: string, buildMode = false) {
   console.log("search query:", query);
   console.log("buildMode:", buildMode);
   const index = new MiniSearch({

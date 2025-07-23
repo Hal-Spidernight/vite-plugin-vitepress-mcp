@@ -5,7 +5,7 @@ import { MarkdownEnv } from "vitepress";
 import MarkdownIt from "markdown-it";
 let renderCount = 0;
 
-export default async function (src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false) {
+export async function miniSearchRender(src: string, env: MarkdownEnv, md: MarkdownIt, buildMode = false) {
   const html = await md.render(src, env);
 
   //.vitepressフォルダを検索
